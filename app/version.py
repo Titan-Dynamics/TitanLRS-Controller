@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Version information utility for USB JR Bay application.
+Version information utility for TitanLRS-Controller application.
 Retrieves git SHA and semantic version information.
 
 Priority order:

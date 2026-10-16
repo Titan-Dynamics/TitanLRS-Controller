@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/elrs-jr-bridge.iml" filepath="$PROJECT_DIR$/.idea/elrs-jr-bridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/TitanLRS-Controller.iml" filepath="$PROJECT_DIR$/.idea/TitanLRS-Controller.iml" />
     </modules>
   </component>
 </project>

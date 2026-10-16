@@ -6,13 +6,13 @@
 cmake-build*/
 .DS_Store
 
-# Python (tools/feeder has its own .gitignore with more detail)
+# Python (app/ has its own .gitignore with more detail)
 __pycache__/
 *.py[cod]
 *.pyc
 *.csv
 
 # IDE
-/tools/feeder/.idea
-tools/feeder/.idea/workspace.xml
-/tools/feeder/build
+/app/.idea
+app/.idea/workspace.xml
+/app/build

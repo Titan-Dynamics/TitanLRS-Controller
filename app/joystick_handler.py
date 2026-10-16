@@ -2,7 +2,7 @@
 Joystick Input Handling
 
 This module manages joystick device detection, connection, and input reading.
-Called from main GUI thread at 250Hz (see JOY_POLL_INTERVAL_S in feeder.py).
+Called from main GUI thread at 250Hz (see JOY_POLL_INTERVAL_S in main.py).
 """
 
 import os

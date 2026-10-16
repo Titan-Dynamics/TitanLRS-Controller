@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Run all unit tests for the USB JR Bay feeder application.
+Run all unit tests for the TitanLRS-Controller application.
 
 This script automatically discovers and runs all tests in the test/ directory.
 """

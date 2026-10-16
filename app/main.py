@@ -137,7 +137,7 @@ class JoystickVisualizer(QtWidgets.QWidget):
 class Main(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(f"USB JR Bay - v{VERSION} ({GIT_SHA})")
+        self.setWindowTitle(f"TitanLRS-Controller - v{VERSION} ({GIT_SHA})")
         # Get the icon path - works both when running as script and as PyInstaller bundle
         icon_path = self._get_icon_path()
         if icon_path and os.path.exists(icon_path):
@@ -148,7 +148,12 @@ class Main(QtWidgets.QWidget):
         self._set_dark_title_bar()
 
         # App-wide settings (separate from calibration data)
-        self.settings = QSettings("USBJRBay", "USB_JR_Bay")
+        self.settings = QSettings("TitanLRS", "TitanLRS-Controller")
+        if not self.settings.allKeys():
+            # One-time migration from the pre-rebrand settings location
+            legacy = QSettings("USBJRBay", "USB_JR_Bay")
+            for key in legacy.allKeys():
+                self.settings.setValue(key, legacy.value(key))
 
         self.cfg = DEFAULT_CFG.copy()
         self._load_cfg()
@@ -429,7 +434,7 @@ class Main(QtWidgets.QWidget):
         current_port = self.portCombo.currentData()
         if current_port and current_port != self.cfg["serial_port"]:
             # Defer until after the GUI is fully constructed so that
-            # jrBayStatusLabel exists when onConnectionStatus fires.
+            # txStatusLabel exists when onConnectionStatus fires.
             _port_text = self.portCombo.currentText()
             QtCore.QTimer.singleShot(0, lambda: self._on_port_changed(_port_text))
 
@@ -443,8 +448,8 @@ class Main(QtWidgets.QWidget):
         self.logging_enabled.toggled.connect(self._on_logging_toggled)
         self.logging_enabled.setChecked(self.settings.value("logging_enabled", False, type=bool))
 
-        self.jrBayStatusLabel = QtWidgets.QLabel("Disconnected")
-        self.jrBayStatusLabel.setStyleSheet("color: red; font-weight: bold;")
+        self.txStatusLabel = QtWidgets.QLabel("Disconnected")
+        self.txStatusLabel.setStyleSheet("color: red; font-weight: bold;")
 
         channels_tab_layout.addLayout(content_layout)
         self.tabs.addTab(channels_tab, "Controller")
@@ -478,7 +483,7 @@ class Main(QtWidgets.QWidget):
         divider2.setLineWidth(2)
         top_bar.addWidget(divider2)
 
-        top_bar.addWidget(self.jrBayStatusLabel)
+        top_bar.addWidget(self.txStatusLabel)
 
         top_bar.addStretch()
         top_bar.addSpacing(32)
@@ -548,8 +553,8 @@ class Main(QtWidgets.QWidget):
         if is_connected:
             # Serial port connected
             try:
-                self.jrBayStatusLabel.setText("Connected")
-                self.jrBayStatusLabel.setStyleSheet("color: white; font-weight: bold;")
+                self.txStatusLabel.setText("Connected")
+                self.txStatusLabel.setStyleSheet("color: white; font-weight: bold;")
                 # Update port combo to show the connected port
                 connected_port = self.serThread.port
                 if connected_port:
@@ -566,8 +571,8 @@ class Main(QtWidgets.QWidget):
         else:
             # Serial port disconnected
             try:
-                self.jrBayStatusLabel.setText("Disconnected")
-                self.jrBayStatusLabel.setStyleSheet("color: red; font-weight: bold;")
+                self.txStatusLabel.setText("Disconnected")
+                self.txStatusLabel.setStyleSheet("color: red; font-weight: bold;")
                 self.lua.reset()
                 self._lua_on_devices([])
             except Exception:
